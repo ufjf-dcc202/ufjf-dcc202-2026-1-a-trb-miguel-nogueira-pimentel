@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Torre de Hanói</title>
+    <link rel="stylesheet" href="torres.css">
+    <link rel="stylesheet" href="historico.css">
+</head>
+
+
+<body>
+
+    <h2>Torre de Hanói</h2>
+    
+
+    <div id="main-container">
+        <!-------- Torres -------->
+        <div id="g">
+            <div class="c" id="c0"></div>
+            <div class="c" id="c1"></div>
+            <div class="c" id="c2"></div>
+        </div>
+        <!-- ------------------ -->
+
+
+        <!-- botões e historico -->
+        <div id="panel">
+
+            <div class="controles">
+                <button id="btn-replay" onclick="startReplay()">▶ Replay</button>
+                <button id="btn-reset" onclick="resetGame()">Reiniciar</button>
+            </div>
+
+            <div id="history-box">
+                <div class="historico" id="empty-msg">Nenhuma jogada realizada</div>
+            </div>
+
+        </div>
+        <!-- ------------------ -->
+    </div>
+
+
+    <!-- mensagem de quando ganha -->
+    <h2 id="m" style="color:#2ecc71; margin-top: 20px; height: 30px;"></h2>
+
+    
+
+
+    <script src="backend.js"></script>
+</body>
+</html>
