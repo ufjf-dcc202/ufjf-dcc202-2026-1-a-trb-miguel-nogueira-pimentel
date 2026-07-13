@@ -1,0 +1,102 @@
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            user-select: none;
+            overflow: hidden;
+            margin: 0;
+            padding: 10%;
+        }
+        h2 {
+            color: #2f3640;
+            margin-bottom: 10px;
+        }
+        #main-container {
+            display: flex;
+            gap: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            align-items: stretch;
+        }
+        #g {
+            display: flex;
+            gap: 40px;
+            height: 320px;
+            align-items: flex-end;
+        }
+        .c {
+            width: 170px;
+            height: 280px;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            border-bottom: 14px solid #4b5257;
+            position: relative;
+            padding-bottom: 2px;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+        .c::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 280px;
+            background: #718093;
+            z-index: 1;
+            bottom: 0;
+            border-radius: 7px 7px 0 0;
+        }
+        .c.over {
+            background: rgba(52, 152, 219, 0.15);
+            border-bottom-color: #3498db;
+        }
+        .d {
+            height: 24px;
+            border-radius: 12px;
+            margin-bottom: 2px;
+            border: 2px solid rgba(0,0,0,0.15);
+            z-index: 2;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+            box-sizing: border-box;
+            transition: transform 0.1s ease-out;
+        }
+       
+
+        #panel {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid #f1f2f6;
+            padding-left: 20px;
+        }
+        .controles {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s, opacity 0.2s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        button:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        
