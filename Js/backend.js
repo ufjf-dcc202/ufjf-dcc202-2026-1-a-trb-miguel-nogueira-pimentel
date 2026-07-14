@@ -383,4 +383,9 @@ if (modalOverlay) {
 }
 
 
+
+
+
+
+
 inicializarJogo();
