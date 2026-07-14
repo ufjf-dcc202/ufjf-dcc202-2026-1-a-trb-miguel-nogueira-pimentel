@@ -11,8 +11,10 @@
 
 <body>
 
-    <h2>Torre de Hanói</h2>
-    
+    <div class="cabecalho-jogo">
+        <h2>Torre de Hanói</h2>
+        <div id="display-jogador">Carregando usuário...</div>
+    </div>
 
     <div id="main-container">
         <!-------- Torres -------->
@@ -23,29 +25,37 @@
         </div>
         <!-- ------------------ -->
 
-
-        <!-- botões e historico -->
-        <div id="panel">
-
+            <!-- botões e historico -->        <div id="panel">
             <div class="controles">
-                <button id="btn-replay" onclick="iniciarReplay()">▶ Replay</button>
-                <button id="btn-reset" onclick="reiniciarJogo()">Reiniciar</button>
+                <button id="btn-replay" type="button" onclick="abrirModalReplay()">▶ Replay</button>
+                <button id="btn-reset" type="button" onclick="abrirModalReset()">Reiniciar</button>
+                <button id="btn-sair" type="button" onclick="abrirModalSair()">Sair</button>
             </div>
 
             <div id="history-box">
                 <div class="historico" id="empty-msg">Nenhuma jogada realizada</div>
             </div>
-
         </div>
         <!-- ------------------ -->
     </div>
 
 
     <!-- mensagem de quando ganha -->
-    <h2 id="m" style="color:#2ecc71; margin-top: 20px; height: 30px;"></h2>
+    <h2 id="m" class="mensage-vitoria"></h2>
 
     
 
+
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 id="modal-title">Ação</h3>
+            <p id="modal-description"></p>
+            <div class="modal-actions">
+                <button type="button" id="modal-cancel" class="btn-secondary">Cancelar</button>
+                <button type="button" id="modal-confirm" class="btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
     <script src="backend.js"></script>
 </body>

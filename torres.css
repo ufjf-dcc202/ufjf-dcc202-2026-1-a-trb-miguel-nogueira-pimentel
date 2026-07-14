@@ -1,120 +1,205 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    user-select: none;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px 16px;
+    box-sizing: border-box;
+}
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: #f5f6fa;
-            user-select: none;
-            overflow: hidden;
-            margin: 0;
-            padding: 10%;
-        }
-        h2 {
-            color: #2f3640;
-            margin-bottom: 10px;
-        }
-        #main-container {
-            display: flex;
-            gap: 40px;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            align-items: stretch;
-        }
-        #g {
-            display: flex;
-            gap: 40px;
-            height: 320px;
-            align-items: flex-end;
-        }
-        .c {
-            width: 170px;
-            height: 280px;
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
-            border-bottom: 14px solid #4b5257;
-            position: relative;
-            padding-bottom: 2px;
-            transition: 0.2s;
-            border-radius: 4px;
-        }
-        .c::after {
-            content: '';
-            position: absolute;
-            width: 14px;
-            height: 280px;
-            background: #718093;
-            z-index: 1;
-            bottom: 0;
-            border-radius: 7px 7px 0 0;
-        }
-        .c.over {
-            background: rgba(52, 152, 219, 0.15);
-            border-bottom-color: #3498db;
-        }
-        .d {
-            height: 24px;
-            border-radius: 12px;
-            margin-bottom: 2px;
-            border: 2px solid rgba(0,0,0,0.15);
-            z-index: 2;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
-            box-sizing: border-box;
-            transition: transform 0.1s ease-out;
-        }
-        
-        .d.movable {
-            cursor: grab;
-        }
-        .d.dragging {
-            cursor: grabbing;
-            pointer-events: none;
-            margin-bottom: 0;
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 999;
-            transition: none;
-        }
-        #panel {
-            width: 280px;
-            display: flex;
-            flex-direction: column;
-            border-left: 2px solid #f1f2f6;
-            padding-left: 20px;
-        }
-        .controles {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background: #3498db;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s, opacity 0.2s;
-        }
-        button:hover {
-            background: #2980b9;
-        }
-        button:disabled {
-            background: #7f8c8d;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
- animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-5px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-  
-        
+h2 {
+    color: #2f3640;
+    margin-bottom: 8px;
+}
+
+.cabecalho-jogo {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.cabecalho-jogo h2 {
+    margin: 0 0 8px;
+}
+
+#display-jogador {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #2c3e50;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+#main-container {
+    display: flex;
+    gap: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    align-items: stretch;
+}
+
+#g {
+    display: flex;
+    gap: 40px;
+    height: 320px;
+    align-items: flex-end;
+}
+
+.c {
+    width: 170px;
+    height: 280px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    border-bottom: 14px solid #4b5257;
+    position: relative;
+    padding-bottom: 2px;
+    transition: 0.2s;
+    border-radius: 4px;
+}
+
+.c::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 280px;
+    background: #718093;
+    z-index: 1;
+    bottom: 0;
+    border-radius: 7px 7px 0 0;
+}
+
+.c.over {
+    background: rgba(52, 152, 219, 0.15);
+    border-bottom-color: #3498db;
+}
+
+.d {
+    height: 24px;
+    border-radius: 12px;
+    margin-bottom: 2px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    z-index: 2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    transition: transform 0.1s ease-out;
+}
+
+.d.movable {
+    cursor: grab;
+}
+
+.d.dragging {
+    cursor: grabbing;
+    pointer-events: none;
+    margin-bottom: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    transition: none;
+}
+
+#panel {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid #f1f2f6;
+    padding-left: 20px;
+}
+
+.controles {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s, opacity 0.2s;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+button:disabled {
+    background: #7f8c8d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-box {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    width: min(100%, 360px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #2c3e50;
+    color: white;
+}
+
+.btn-secondary {
+    background: #ecf0f1;
+    color: #2c3e50;
+}
+
+
+
+.mensage-vitoria{
+    color:#2ecc71;
+     margin-top: 20px;
+      height: 30px;
+
+}
