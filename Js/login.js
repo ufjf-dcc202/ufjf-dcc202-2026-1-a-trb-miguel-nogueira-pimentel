@@ -136,7 +136,7 @@ function gerarNomeGuest() {
 
 function liberarJogo(nome) {
     localStorage.setItem('nomeJogadorAtual', nome);
-    window.location.href = 'game.html';
+    window.location.href = "HTML/game.html";
 }
 
 
