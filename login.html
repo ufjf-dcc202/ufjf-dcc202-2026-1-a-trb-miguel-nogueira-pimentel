@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Torre de Hanói - Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <div id="tela-entrada">
+        <div class="modal-entrada">
+            <h2>Bem-vindo ao Jogo</h2>
+            <div id="login-message" class="login-message"></div>
+            <p>Escolha como deseja jogar:</p>
+
+            <button id="btn-login" type="button" onclick="abrirModalLogin()">Login</button>
+            <button id="btn-registro" type="button" onclick="abrirModalRegistro()">Registrar</button>
+            <button id="btn-guest" type="button" onclick="abrirModalGuest()">Entrar como Guest</button>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-box">
+            <h3 id="modal-title">Ação</h3>
+            <p id="modal-description" class="modal-description">Informe os dados para continuar.</p>
+            <form id="modal-form" class="modal-form">
+                <input id="modal-input" type="text" placeholder="Digite aqui" />
+                <div class="modal-actions">
+                    <button type="button" id="modal-cancel" class="btn-secondary">Cancelar</button>
+                    <button type="submit" id="modal-submit" class="btn-primary">Continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
