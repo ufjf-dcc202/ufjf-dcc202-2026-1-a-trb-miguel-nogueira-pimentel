@@ -3,8 +3,8 @@
 let estado = [[8, 7, 6, 5, 4, 3, 2, 1], [], []];
 let historicoMovimentos = []; 
 let reproduzindo = false;
-
-
+let modalConfirmacao = null;
+let nomeJogadorAtual = localStorage.getItem('nomeJogadorAtual') || '';
 
 const drag = {
     ativo: false,
@@ -28,6 +28,22 @@ const drag = {
 
 //cores do disco
 const cores = ['#2c3e50', '#4a69bd', '#1e3799', '#05c46b', '#0be881', '#ffc048', '#ff5e57', '#ff3f34'];
+
+function inicializarJogo() {
+    const jogador = localStorage.getItem('nomeJogadorAtual');
+    if (!jogador) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    nomeJogadorAtual = jogador;
+    const display = document.getElementById('display-jogador');
+    if (display) {
+        display.innerHTML = `<strong>Jogador:</strong> ${nomeJogadorAtual}`;
+    }
+
+    renderizar();
+}
 
 
 
@@ -158,24 +174,213 @@ function finalizarArrasto() {
 }
 
 
+//mensagem de vitoria
+function checarVitoria() {
+    const mensagemEl = document.getElementById('m');
+    if (estado[1].length === 8 || estado[2].length === 8) {
+        mensagemEl.innerText = 'Parabéns! Você venceu!';
+    } else {
+        mensagemEl.innerText = '';
+    }
+}
 
 
-//reiniciar o jogo
-function reiniciarJogo() {
-    if (reproduzindo) return; 
-    estado = [[8, 7, 6, 5, 4, 3, 2, 1], [], []]; 
-    historicoMovimentos = []; 
+
+
+
+
+//efeitos e fisica do treco
+function loopFisicaAnimacao() {
+    if (!drag.ativo || !drag.elemento) return; 
     
+    //Animacao do discozinho
+        let velocidadeMouseX = drag.x - drag.ultimoX;
+        drag.ultimoX = drag.x; 
+        
+        drag.velocidadeAngular -= velocidadeMouseX * 0.15;
+        drag.velocidadeAngular -= drag.angulo * 0.12;
+        drag.velocidadeAngular *= 0.84; // Atrito
+        
+        drag.angulo += drag.velocidadeAngular; 
+        drag.angulo = Math.max(-45, Math.min(45, drag.angulo)); // Limita rotação
+    //-------------------------
+    
+    
+    // aplicar efeitos no disco
+        let posX = drag.x - drag.offsetX;
+        let posY = drag.y - drag.offsetY;
+        drag.elemento.style.transform = `translate(${posX}px, ${posY}px) rotate(${drag.angulo}deg)`;
+    //-----------------------    
+
+
+
+    //hoverzin da coluna
+        drag.alvo = null;
+        for (let i = 0; i < 3; i++) {
+            let colEl = document.getElementById('c' + i);
+            let cRect = colEl.getBoundingClientRect();
+            
+            if (drag.x >= cRect.left && drag.x <= cRect.right && drag.y >= cRect.top && drag.y <= cRect.bottom) {
+                drag.alvo = i;
+                colEl.classList.add('over'); 
+            } else {
+                colEl.classList.remove('over');
+            }
+        }
+    //----------------------
+
+    
+    drag.frameAnimacao = requestAnimationFrame(loopFisicaAnimacao);
+}
+
+
+
+
+// guardar os movs no historico
+function adicionarAoHistorico(de, para, disco) {
+    historicoMovimentos.push({ de, para, disco });
+
     const caixa = document.getElementById('history-box');
-    caixa.innerHTML = '<div style="color: #7f8c8d; font-size: 13px; text-align: center; margin-top: 20px;" id="empty-msg">Nenhuma jogada realizada</div>';
-    
+    const msgVazia = document.getElementById('empty-msg');
+    if (msgVazia) msgVazia.remove();
+
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerText = `Jogada ${historicoMovimentos.length}: Disco ${disco} (Pino ${de + 1} ➔ Pino ${para + 1})`;
+    caixa.appendChild(item);
+    caixa.scrollTop = caixa.scrollHeight;
+}
+
+
+
+//replay
+function iniciarReplay() {
+    if (historicoMovimentos.length === 0 || reproduzindo) return;
+    reproduzindo = true;
+
+    estado = [[8, 7, 6, 5, 4, 3, 2, 1], [], []];
+    renderizar();
+
+    let passo = 0;
+    let intervalo = setInterval(() => {
+        if (passo >= historicoMovimentos.length) {
+            clearInterval(intervalo);
+            reproduzindo = false;
+            renderizar();
+            return;
+        }
+
+        let movimento = historicoMovimentos[passo];
+        estado[movimento.para].push(estado[movimento.de].pop());
+
+        let colDestinoEl = document.getElementById('c' + movimento.para);
+        if (colDestinoEl) {
+            colDestinoEl.classList.add('over');
+            setTimeout(() => colDestinoEl.classList.remove('over'), 250);
+        }
+
+        renderizar();
+        passo++;
+    }, 700);
+}
+
+
+//resetar
+function reiniciarJogo() {
+    if (reproduzindo) return;
+    estado = [[8, 7, 6, 5, 4, 3, 2, 1], [], []];
+    historicoMovimentos = [];
+
+    const caixa = document.getElementById('history-box');
+    if (caixa) {
+        caixa.innerHTML = '<div style="color: #7f8c8d; font-size: 13px; text-align: center; margin-top: 20px;" id="empty-msg">Nenhuma jogada realizada</div>';
+    }
+
     renderizar();
 }
 
 
+//----------------------
+// CAMPO DOS MODAIS
+    
+function abrirModalConfirmacao(titulo, mensagem, callback) {
+    const title = document.getElementById('modal-title');
+    const description = document.getElementById('modal-description');
+    const overlay = document.getElementById('modal-overlay');
+
+    if (!title || !description || !overlay) return;
+
+    title.textContent = titulo;
+    description.textContent = mensagem;
+    modalConfirmacao = callback;
+    overlay.classList.remove('hidden');
+}
+
+
+function fecharModalConfirmacao() {
+    const overlay = document.getElementById('modal-overlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
+    modalConfirmacao = null;
+}
+
+
+function abrirModalReplay() {
+    abrirModalConfirmacao('Repetir jogadas', 'Deseja assistir o replay das jogadas realizadas?', () => iniciarReplay());
+}
+
+
+function abrirModalReset() {
+    abrirModalConfirmacao('Reiniciar jogo', 'Deseja reiniciar a partida e limpar o histórico?', () => reiniciarJogo());
+}
+
+
+function abrirModalSair() {
+    abrirModalConfirmacao('Sair do jogo', 'Deseja voltar para a tela de login?', () => {
+        localStorage.removeItem('nomeJogadorAtual');
+        window.location.href = 'login.html';
+    });
+}
+
+
+//--------------------------------
+
+
+
 window.addEventListener('mousemove', atualizarPosicaoMouse);
-window.addEventListener('touchmove', atualizarPosicaoMouse, {passive: false});
+window.addEventListener('touchmove', atualizarPosicaoMouse, { passive: false });
 window.addEventListener('mouseup', finalizarArrasto);
 window.addEventListener('touchend', finalizarArrasto);
 
-renderizar();
+
+
+//modais
+const modalCancel = document.getElementById('modal-cancel');
+const modalConfirm = document.getElementById('modal-confirm');
+const modalOverlay = document.getElementById('modal-overlay');
+
+
+if (modalCancel) {
+    modalCancel.addEventListener('click', fecharModalConfirmacao);
+}
+
+if (modalConfirm) {
+    modalConfirm.addEventListener('click', () => {
+        if (modalConfirmacao) {
+            modalConfirmacao();
+        }
+        fecharModalConfirmacao();
+    });
+}
+
+if (modalOverlay) {
+    modalOverlay.addEventListener('click', (event) => {
+        if (event.target.id === 'modal-overlay') {
+            fecharModalConfirmacao();
+        }
+    });
+}
+
+
+inicializarJogo();
