@@ -25,9 +25,40 @@ const drag = {
 
 
 
+//Sisteminha de som quando move o disco 
+let audioContext = null;
+
+function tocarSomMovimento() {
+    if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        audioContext = new AudioCtx();
+    }
+
+    const duration = 0.4;
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = 'triangle';   //formato da onda / som 
+    oscillator.frequency.value = 520; //agudo ou não (frequencai)
+
+    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);                     //volume inicial
+    gain.gain.exponentialRampToValueAtTime(0.15, audioContext.currentTime + 0.01);  //volume final
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration); //som diminuindo dps
+
+    oscillator.connect(gain);//liga o som
+    gain.connect(audioContext.destination);//joga no site
+
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);//inicia e para esses e o de cima
+}
+
+
+
+
 
 //cores do disco
-const cores = ['#2c3e50', '#4a69bd', '#1e3799', '#05c46b', '#0be881', '#ffc048', '#ff5e57', '#ff3f34'];
+const cores = ['#3c5874', '#4a69bd', '#1e3799', '#05c46b', '#0be881', '#ffc048', '#ff5e57', '#ff3f34'];
 
 function inicializarJogo() {
     const jogador = localStorage.getItem('nomeJogadorAtual');
@@ -67,6 +98,7 @@ function efetuarMovimento(origem, destino) {
         let disco = estado[origem].pop();
         estado[destino].push(disco);
         adicionarAoHistorico(origem, destino, disco);
+        tocarSomMovimento();
         return true;
     }
     return false;
@@ -272,6 +304,7 @@ function iniciarReplay() {
 
         let movimento = historicoMovimentos[passo];
         estado[movimento.para].push(estado[movimento.de].pop());
+        tocarSomMovimento();
 
         let colDestinoEl = document.getElementById('c' + movimento.para);
         if (colDestinoEl) {
