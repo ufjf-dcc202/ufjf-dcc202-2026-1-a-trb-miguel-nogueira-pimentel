@@ -27,8 +27,11 @@ const drag = {
 
 //Sisteminha de som quando move o disco 
 let audioContext = null;
+let somAtivo = true;
 
 function tocarSomMovimento() {
+    if (!somAtivo) return;
+
     if (!audioContext) {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         if (!AudioCtx) return;
@@ -57,6 +60,20 @@ function tocarSomMovimento() {
 
 
 
+//Botão para mutar
+function alternarMute() {
+    somAtivo = !somAtivo;
+    atualizarBotaoMute();
+}
+
+function atualizarBotaoMute() {
+    const botao = document.getElementById('btn-mute');
+    if (!botao) return;
+    botao.innerText = somAtivo ? '🔊 Som' : '🔇 Mudo';
+}
+
+
+
 //cores do disco
 const cores = ['#3c5874', '#4a69bd', '#1e3799', '#05c46b', '#0be881', '#ffc048', '#ff5e57', '#ff3f34'];
 
@@ -73,6 +90,7 @@ function inicializarJogo() {
         display.innerHTML = `<strong>Jogador:</strong> ${nomeJogadorAtual}`;
     }
 
+    atualizarBotaoMute();
     renderizar();
 }
 
